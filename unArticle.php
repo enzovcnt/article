@@ -19,22 +19,35 @@ $articles = [
     ],
 ];
 
-//vérifie que bien passé dans l'URL
-if (isset($_GET['id']))
+
+
+function redirect()
 {
-    $id = $_GET['id'];
-    echo $id;
+    header('Location: articles.php');
+    exit();
 }
 
-$chooseArticle = null;
-foreach ($articles as $article){
-    if ($article['id'] == $id)
+
+if(empty($_GET['id']) || !ctype_digit($_GET['id']))
+{
+    redirect();
+}
+
+$id = $_GET['id'];
+$articleEnCours = null;
+
+foreach($articles as $article)
+{
+    if($article['id'] == $id)
     {
-        $chooseArticle = $article;
+        $articleEnCours = $article;
     }
-    echo $chooseArticle;
+
 }
 
+if(!$articleEnCours){
+    redirect();
+}
 
 
 
@@ -52,7 +65,6 @@ foreach ($articles as $article){
 
 
 <div class="container row">
-    <?php foreach ($articles as $article) { ?>
         <div class="card" style="width: 18rem;">
             <img src="images/<?= $article['image'] ?>" class="card-img-top" alt="...">
             <div class="card-body">
@@ -60,8 +72,8 @@ foreach ($articles as $article){
                 <p class="card-text"><?= $article['content'] ?></p>
                 <a href="unArticle.php?id=<?= $article['id'] ?>" class="btn btn-primary">Lire l'article</a>
             </div>
+            <a href="articles.php" class="btn btn-primary">retour</a>
         </div>
-    <?php } ?>
 
 
 </div>
